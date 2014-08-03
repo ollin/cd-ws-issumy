@@ -1,0 +1,9 @@
+{
+  "main":"httphelloworld.HelloWorldServer",
+
+  "description":"ch open, cd ws, example",
+  "licenses": ["The MIT License (MIT)"],
+  "author": "Oliver Nautsch",
+
+  "auto-redeploy": true
+}
