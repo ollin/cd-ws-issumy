@@ -159,3 +159,4 @@ task createDockerImage (type: Exec) {
     commandLine 'docker', 'build', '-t', "ollin/issumy:$version", '.'
 }
 createDockerImage.dependsOn createDockerfile, prepareModZipForDocker
+build.dependsOn createDockerImage
