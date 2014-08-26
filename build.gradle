@@ -122,3 +122,41 @@ uploadArchives {
         }
     }
 }
+
+task prepareModZipForDocker (type: Copy) {
+    from modZip
+    into 'build/docker'
+}
+
+task createDockerfile << {
+    def dockerFile = 'build/docker/Dockerfile'
+
+    def oldDockerFile = new File(dockerFile)
+
+    if (oldDockerFile.exists()) {
+        oldDockerFile.delete();
+    }
+
+    def newDockerFile = new File(dockerFile)
+    newDockerFile.createNewFile();
+
+    newDockerFile.withWriter { out ->
+        out.writeLine("FROM ollin/vertx")
+        out.writeLine("MAINTAINER Oliver Nautsch <oliver.nautsch@gmail.com>")
+        out.writeLine("")
+        out.writeLine("VOLUME /home/issumy")
+        out.writeLine("ADD $modZip.archiveName /home/issumy/$modZip.archiveName")
+        out.writeLine("EXPOSE 8080")
+        out.writeLine("")
+        out.writeLine("WORKDIR /home/issumy")
+        out.writeLine("CMD [\"runzip\", \"$modZip.archiveName\"]")
+    }
+}
+createDockerfile.dependsOn prepareModZipForDocker
+
+task createDockerImage (type: Exec) {
+    workingDir 'build/docker'
+    commandLine 'docker', 'build', '-t', "ollin/issumy:$version", '.'
+}
+createDockerImage.dependsOn createDockerfile, prepareModZipForDocker
+build.dependsOn createDockerImage
