@@ -1,3 +1,5 @@
+version = readVersion()
+
 apply from: "gradle/vertx.gradle"
 
 /*
@@ -64,8 +66,6 @@ test {
   */
 
 }
-
-version = readVersion()
 
 String readVersion() {
     def versionFile = file('version.properties')
