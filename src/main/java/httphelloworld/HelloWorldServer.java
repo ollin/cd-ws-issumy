@@ -25,11 +25,9 @@ import java.util.Map;
 public class HelloWorldServer extends Verticle {
 
     public void start() {
-        vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
-            public void handle(HttpServerRequest req) {
-                req.response().headers().set("Content-Type", "text/plain");
-                req.response().end("Hello World");
-            }
+        vertx.createHttpServer().requestHandler(req -> {
+            req.response().headers().set("Content-Type", "text/plain");
+            req.response().end("Hello World");
         }).listen(8080);
     }
 }
