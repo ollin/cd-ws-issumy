@@ -1,6 +1,7 @@
 version = readVersion()
 
 apply from: "gradle/vertx.gradle"
+apply plugin: "jacoco"
 
 /*
 Usage:
@@ -60,11 +61,10 @@ dependencies {
 }
 
 test {
-  /* Configure which tests are included
-  include 'org/foo/**'
-  exclude 'org/boo/**'
-  */
+}
 
+jacoco {
+    toolVersion = "0.7.1.201405082137"
 }
 
 String readVersion() {
