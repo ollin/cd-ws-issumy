@@ -177,29 +177,29 @@ createDockerfile.dependsOn prepareModZipForDocker
 
 task createDockerImage (type: Exec) {
     workingDir 'build/docker'
-    commandLine 'docker', 'build', '-t', "inventage/issumy:$version", '.'
+    commandLine 'sudo', 'docker', 'build', '-t', "inventage/issumy:$version", '.'
 }
 createDockerImage.dependsOn createDockerfile, prepareModZipForDocker
 build.dependsOn createDockerImage
 
 task tagDockerImageLatest (type: Exec) {
-    commandLine 'docker', 'tag', "inventage/issumy:$version", "localhost:5000/inventage/issumy:latest"
+    commandLine 'sudo', 'docker', 'tag', "inventage/issumy:$version", "localhost:5000/inventage/issumy:latest"
 }
 tagDockerImageLatest.dependsOn createDockerImage
 
 task pushDockerImageLatest (type: Exec) {
-    commandLine 'docker', 'push', "localhost:5000/inventage/issumy:latest"
+    commandLine 'sudo', 'docker', 'push', "localhost:5000/inventage/issumy:latest"
 }
 pushDockerImageLatest.dependsOn tagDockerImageLatest
 
 
 task tagDockerImageVersion (type: Exec) {
-    commandLine 'docker', 'tag', "inventage/issumy:$version", "localhost:5000/inventage/issumy:$version"
+    commandLine 'sudo', 'docker', 'tag', "inventage/issumy:$version", "localhost:5000/inventage/issumy:$version"
 }
 tagDockerImageVersion.dependsOn createDockerImage
 
 task pushDockerImageVersion (type: Exec) {
-    commandLine 'docker', 'push', "localhost:5000/inventage/issumy:$version"
+    commandLine 'sudo', 'docker', 'push', "localhost:5000/inventage/issumy:$version"
 }
 pushDockerImageVersion.dependsOn tagDockerImageVersion
 uploadArchives.dependsOn pushDockerImageVersion, pushDockerImageLatest
