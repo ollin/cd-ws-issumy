@@ -52,8 +52,7 @@ repositories {
     // are concurrent builds
     mavenLocal()
   }
-  maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-  mavenCentral()
+  maven { url 'http://nexus:8181/nexus/content/groups/public/' }
 }
 
 dependencies {
@@ -73,8 +72,7 @@ buildscript {
       // are concurrent builds
       mavenLocal()
     }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    mavenCentral()
+    maven { url 'http://nexus:8181/nexus/content/groups/public/' }
   }
 
   dependencies {

@@ -71,7 +71,7 @@ String readVersion() {
     def versionFile = file('version.properties')
 
     def env = System.getenv()
-    def versionSuffix = (env.PIPE_FLOW_NUMBER as Integer != null) ? ".$env.PIPE_FLOW_NUMBER" : '-SNAPSHOT'
+    def versionSuffix = (env.PIPE_FLOW_NUMBER != null) ? ".$env.PIPE_FLOW_NUMBER" : '-SNAPSHOT'
 
     Properties versionProps = new Properties()
 
