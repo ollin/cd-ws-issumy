@@ -65,8 +65,3 @@ uploadArchives {
         }
     }
 }
-
-task prepareModZipForDocker (type: Copy) {
-    from modZip
-    into 'build/docker'
-}
