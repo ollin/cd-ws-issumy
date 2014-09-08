@@ -2,6 +2,7 @@ package com.inventage.issumy.issues.test.integration;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import com.inventage.issumy.issues.IssuesStarterVerticle;
 import org.junit.Test;
 import org.vertx.java.core.http.HttpClient;
 import org.vertx.testtools.TestVerticle;
@@ -19,7 +20,7 @@ public class IssuesViaRestTest extends TestVerticle {
         // when
         HttpClient client = vertx.createHttpClient()
             .setHost("localhost")
-            .setPort(8071);
+            .setPort(8080);
 
         client.getNow("/issues", event -> event.bodyHandler(bodyEvent -> {
             String result = bodyEvent.toString();
@@ -31,6 +32,12 @@ public class IssuesViaRestTest extends TestVerticle {
     @Override
     public void start() {
         initialize();
-        startTests();
+
+        container.deployVerticle(IssuesStarterVerticle.class.getName(), event -> {
+            if (event.failed()) {
+                throw new IllegalStateException("deployment of module failed", event.cause());
+            }
+            startTests();
+        });
     }
 }
