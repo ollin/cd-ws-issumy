@@ -16,10 +16,17 @@ public class IssuesRestVerticle extends Verticle {
     public void start() {
         RouteMatcher rm = new RouteMatcher();
 
-        rm.get("/issues", req -> {
-            req.response().headers().set("Content-Type", "application/json");
-            vertx.eventBus().send("com.inventage.issumy.issues", "",
-                (Message<JsonArray> msg) -> req.response().end(msg.body().encode()));
+        rm.get("/issues", new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(HttpServerRequest req) {
+                vertx.eventBus().send("com.inventage.issumy.issues", "", new Handler<Message<JsonArray>>() {
+                    @Override
+                    public void handle(Message<JsonArray> msg) {
+                        req.response().headers().set("Content-Type", "application/json");
+                        req.response().end(msg.body().encode());
+                    }
+                });
+            }
         });
 
         vertx.createHttpServer().requestHandler(rm).listen(8080);
