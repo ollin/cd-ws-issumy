@@ -8,17 +8,21 @@ import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.platform.Verticle;
 
 /**
- * handles the REST calls.
+ * handels the REST calls.
  */
 public class IssuesRestVerticle extends Verticle {
 
     @Override
     public void start() {
-        vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
-            public void handle(HttpServerRequest req) {
-                req.response().headers().set("Content-Type", "text/plain");
-                req.response().end("Hello ----- issumy");
-            }
-        }).listen(8080);
+        RouteMatcher rm = new RouteMatcher();
+
+        rm.get("/issues", req -> {
+            req.response().headers().set("Content-Type", "application/json");
+            vertx.eventBus().send("com.inventage.issumy.issues", "",
+                (Message<JsonArray> msg) -> req.response().end(msg.body().encode()));
+        });
+
+        vertx.createHttpServer().requestHandler(rm).listen(8080);
+        container.logger().info("IssuesRestVerticle started");
     }
 }
